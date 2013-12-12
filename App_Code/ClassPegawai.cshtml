@@ -1,0 +1,28 @@
+﻿@using System.Dynamic;
+@functions{
+    public class pegawai{
+        //select
+        public static dynamic SelectPegawai {
+            get{
+            var sql = "select pegawai.idPegawai as ID, pegawai.namaPegawai as Nama from pegawai";
+            return AccessData.ppe1.Query(sql);
+            }
+        }
+
+        public static dynamic SelectPegawai2(string id) {
+            
+            var sql = "SELECT namaPegawai, idLokasi from pegawai where idPegawai=@0";
+            return AccessData.ppe1.QuerySingle(sql, id);
+            
+        }
+
+        public static dynamic SelectLokasi(string id) {
+            
+            var sql = "select idLokasi from pegawai where idPegawai=@0";
+            return AccessData.ppe1.QuerySingle(sql, id);
+            
+        }
+        
+    }
+
+}

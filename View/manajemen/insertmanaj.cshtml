@@ -1,0 +1,34 @@
+﻿@{
+    Layout = "~/MasterPage/_Layout.cshtml";
+    Page.Title = "Data Distribusi dan Kontrol";
+
+    var selectedData = ClassPegawai.pegawai.SelectPegawai;
+    var grid = new WebGrid(source: selectedData, rowsPerPage: 10);
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        <div>
+    <h3>Pilih Pegawai</h3>
+        <div>
+                @grid.GetHtml(
+                tableStyle: "grid",
+                headerStyle: "head",
+                alternatingRowStyle: "alt",
+                columns: grid.Columns(                 
+                    grid.Column("ID"),
+                    grid.Column("Nama"),
+                    grid.Column(format: @<a href="insertmanaj2?idPegawai=@item.ID">Pilih</a>)
+                    
+                )
+            )
+        </div>
+</div>
+    </body>
+</html>

@@ -1,0 +1,104 @@
+﻿@using System.Dynamic;
+@{
+    Layout = "~/MasterPage/_Layout.cshtml";
+    Page.Title = "Input Data Peralatan";
+
+    Validation.RequireField("idAlat", "Anda Harus Mengisi Nomor PPE");
+    Validation.RequireField("namaAlat", "Anda Harus Mengisi Nama PPE");
+    Validation.Add("jumlah",
+        Validator.Required("Anda Harus mengisi Jumlah PPE"),
+        Validator.Integer("isikan dengan angka")
+    );
+
+    var data = ClassLokasi.lokasi.SelectLokasi;
+
+    if(IsPost && Validation.IsValid()){
+       dynamic ppe = new ExpandoObject();
+       ppe.id = Request.Form["idAlat"];
+       ppe.namaAlat = Request.Form["namaAlat"];
+       ppe.deskripsi = Request.Form["deskripsi"];
+       ppe.jumlah = Request.Form["jumlah"];
+       ppe.idLokasi = Request.Form["idLokasi"];
+      
+       Classppe.ppe.AddAlat(ppe);
+       Response.Redirect("peralatan");
+    }
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        <div>
+  <h1>Tambah Data peralatan</h1>
+  <form method="post">
+    <fieldset>
+      <legend>Tambahkan Data</legend>
+        <table>
+            <tr>
+                <td>
+                    <label for="idAlat">Nomor PPE:</label>
+                </td>
+                <td>
+                    <input type="text" name="idAlat" value="@Request.Form["idAlat"]"/>
+                </td>
+                <td>
+                    @Html.ValidationMessage("idAlat")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="namaAlat">nama alat:</label>
+                </td>
+                <td>
+                    <input type="text" name="namaAlat" value="@Request.Form["namaAlat"]"/>
+                </td>
+                <td>
+                    @Html.ValidationMessage("namaAlat")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="deskripsi">deskripsi:</label>
+                </td>
+                <td>
+                    <textarea rows="10" cols="60" name="deskripsi">@Request.Form["deskripsi"]</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="jumlah">jumlah:</label>
+                </td>
+                <td>
+                    <input type="text" name="jumlah" value="@Request.Form["jumlah"]"/>
+                </td>
+                <td>
+                    @Html.ValidationMessage("jumlah")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="idLokasi">Lokasi:</label>
+                </td>
+                <td>
+                    <select name="idLokasi">
+                        @foreach(var item in data){
+                        <option value="@item.idLokasi">@item.namaLokasi</option>
+                        
+                        }
+                    </select>
+                </td>
+            </tr>
+
+        </table>
+
+        <input type="submit" name="buttonSubmit" value="Tambahkan ke Daftar" /></p>
+    </fieldset>
+  </form>
+</div>
+    </body>
+</html>

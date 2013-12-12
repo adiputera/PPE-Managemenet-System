@@ -1,0 +1,167 @@
+﻿@using System.Dynamic;
+@{
+    Layout = "~/MasterPage/_Layout.cshtml";
+    Page.Title = "Tambah Data";
+    
+    Validation.Add("jumlah",
+        Validator.Required("Anda Harus mengisi Jumlah"),
+        Validator.Integer("isikan dengan angka")
+    );
+    Validation.RequireField("id", "Anda Harus Mengisi Nomor Kontrol");
+
+    var nama = "";  
+    var idLokasi = "";
+    var idPeg = "";
+    var tanggal = "";
+    var lokasi = "";
+
+    idPeg = Request.QueryString["idPegawai"];
+    var idlo = ClassPegawai.pegawai.SelectLokasi(idPeg);
+    idLokasi = idlo.idLokasi;
+    var alat = Classppe.ppe.SelectAlat(idLokasi);
+
+    if(!IsPost){
+        if(!Request.QueryString["idPegawai"].IsEmpty()) {
+            idPeg = Request.QueryString["idPegawai"];
+            var row = ClassPegawai.pegawai.SelectPegawai2(idPeg);
+            
+            if(row != null) {
+                tanggal = @DateTime.Now.ToString();
+                nama = row.namaPegawai;
+                idLokasi = row.idLokasi;
+
+                var nalok = ClassLokasi.lokasi.SelectNalok(idLokasi);
+                lokasi = nalok.namaLokasi;
+            }
+            else{
+                Validation.AddFormError("Tidak ada data yang dipilih");
+            }
+        }
+        else{
+            Validation.AddFormError("Tidak ada data yang dipilih");
+        }
+    }
+
+
+    if(IsPost && Validation.IsValid()){
+       dynamic ppe = new ExpandoObject();
+       dynamic Manajemen = new ExpandoObject();
+       Manajemen.tanggal = @DateTime.Now.ToString();
+       Manajemen.id = Request.Form["id"];
+       Manajemen.idPegawai = Request.Form["idPeg"];
+       Manajemen.idLokasi = Request.Form["idLokasi"];
+       Manajemen.idAlat = Request.Form["idAlat"];
+       Manajemen.jumlah = Request.Form["jumlah"];
+       ppe.jumlah = Request.Form["jumlah"];
+       ppe.id = Request.Form["idAlat"];
+
+       Classppe.ppe.EditJumlah1(ppe); 
+       ClassManajemen.manajemen.AddManaj(Manajemen);     
+       Response.Redirect("manajemen");
+       }
+       else{
+           idPeg = Request.QueryString["idPegawai"];
+            var row = ClassPegawai.pegawai.SelectPegawai2(idPeg);
+
+            
+            
+            if(row != null) {
+                tanggal = @DateTime.Now.ToString();
+                nama = row.namaPegawai;
+                idLokasi = row.idLokasi;
+
+                var nalok = ClassLokasi.lokasi.SelectNalok(idLokasi);
+                lokasi = nalok.namaLokasi;
+       }}
+    
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        <div>
+  <h2>Tambah Data</h2>
+  <form method="post">
+    <fieldset>
+        <table>
+            <tr>
+                <td>
+                    <label for="tanggal">tanggal:</label>
+                </td>
+                <td>
+                    <label for="tanggal">@tanggal </label>
+                </td>
+                <td>
+      
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="id">Nomor Kontrol:</label>
+                </td>
+                <td>
+                    <input type="text" name="id" value="@Request.Form["id"]"/>
+                </td>
+                <td>
+                    @Html.ValidationMessage("id")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="nama">Nama Pegawai:</label>
+                </td>
+                <td>
+                    <label for="nama">@nama  </label>
+                    <input type="hidden" name="idPeg" value="@idPeg">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="jumlah">Lokasi:</label>
+                </td>
+                <td>
+                    <label for="jumlah">@lokasi</label>
+                    <input type="hidden" name="idLokasi" value="@idLokasi">
+                </td>
+                <td>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="idLokasi">PPE:</label>
+                </td>
+                <td>
+                    <select name="idAlat">
+                        @foreach(var item in alat){
+                        <option value="@item.idALat">@item.Alat</option>
+                            
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="jumlah">jumlah:</label>
+                </td>
+                <td>
+                    <input type="text" name="jumlah" value="@Request.Form["jumlah"]"/>
+                </td>
+                <td>
+                    @Html.ValidationMessage("jumlah")
+                </td>
+            </tr>
+         
+        </table>
+
+        <input type="submit" name="buttondelete" value="Tambah Data" /></p>
+    </fieldset>
+  </form>
+</div>
+    </body>
+</html>

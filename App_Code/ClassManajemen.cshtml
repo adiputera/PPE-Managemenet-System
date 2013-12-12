@@ -1,0 +1,93 @@
+﻿@using System.Dynamic;
+@functions{
+    public class manajemen{
+        //select
+        public static dynamic SelectManaj {
+            get{
+            var sql = "select manajemen.tanggal as waktu, manajemen.idManajemen as Nomor_Kontrol, pegawai.namapegawai as karyawan, lokasi.namalokasi as lokasi, peralatan.namaalat as PPE, manajemen.jumlah as jumlah from manajemen, pegawai, lokasi, peralatan where pegawai.idpegawai=manajemen.idpegawai and lokasi.idlokasi=manajemen.idlokasi and peralatan.idalat=manajemen.idalat";
+            return AccessData.ppe1.Query(sql);
+            }
+        }
+
+        public static dynamic SelectManajemen(string id){
+            var sql = "SELECT * FROM manajemen WHERE idManajemen = @0";
+            return AccessData.ppe1.QuerySingle(sql, id);
+        }
+
+        public static dynamic SelectManajemen2(string id){
+            var sql = "select pegawai.namaPegawai as nama from pegawai, manajemen where manajemen.idManajemen = @0 and pegawai.idPegawai=manajemen.idPegawai";
+            return AccessData.ppe1.QuerySingle(sql, id);
+        }
+
+        public static dynamic SelectManajemen3(string id){
+            var sql = "select lokasi.namaLokasi as nama from lokasi, manajemen where manajemen.idManajemen = @0 and lokasi.idLokasi=manajemen.idLokasi";
+            return AccessData.ppe1.QuerySingle(sql, id);
+        }
+
+        public static dynamic SelectManajemen4(string id){
+            var sql = "select peralatan.namaAlat as nama from peralatan, manajemen where manajemen.idManajemen = @0 and peralatan.idAlat = manajemen.idAlat";
+            return AccessData.ppe1.QuerySingle(sql, id);
+        }
+
+        //Insert
+        public static void AddManaj(dynamic Manajemen) {
+            var sql = "insert into manajemen (tanggal, idManajemen, idPegawai, idLokasi, idAlat, jumlah) values(@0, @1, @2, @3, @4, @5)";
+            AccessData.ppe1.Execute(sql, Manajemen.tanggal, Manajemen.id, Manajemen.idPegawai, Manajemen.idLokasi, Manajemen.idAlat, Manajemen.jumlah);
+        }
+
+        //Edit
+        public static void EditManaj(dynamic Manajemen) {
+            var sql = "UPDATE manajemen SET jumlah=@0 WHERE idManajemen=@1";
+            AccessData.ppe1.Execute(sql, Manajemen.jumlah, Manajemen.id);
+        }
+
+        //Delete
+        public static void DeleteManaj(string id) {
+            var sql = "DELETE manajemen WHERE idManajemen=@0";
+            AccessData.ppe1.Execute(sql, id);
+        }
+
+        //kebutuhan
+        public static dynamic KebutuhanBulan {
+            get{
+            var sql = "select datepart(month, tanggal) as Bulan, sum(jumlah) as jumlah from manajemen group by datepart(month, tanggal)";
+            return AccessData.ppe1.Query(sql);
+            }
+        }
+
+        public static dynamic AlatBulan {
+            get{
+            var sql = "select distinct manajemen.idAlat as Nomor_PPE, peralatan.namaAlat as PPE from manajemen, peralatan where peralatan.idAlat=manajemen.idAlat";
+            return AccessData.ppe1.Query(sql);
+            }
+        }
+
+        public static dynamic KebutuhanBulan1(string idAlat) {
+            
+            var sql = "select datepart(month, tanggal) as Bulan, sum(jumlah) as jumlah from manajemen where idAlat=@0 group by datepart(month, tanggal)";
+            return AccessData.ppe1.Query(sql, idAlat);
+            
+        }
+
+        public static dynamic KebutuhanQuarter {
+            get{
+            var sql = "select datepart(quarter, tanggal) as Quarter, sum(jumlah) as jumlah from manajemen group by datepart(quarter, tanggal)";
+            return AccessData.ppe1.Query(sql);
+            }
+        }
+
+        public static dynamic AlatQuarter {
+            get{
+            var sql = "select distinct manajemen.idAlat as Nomor_PPE, peralatan.namaAlat as PPE from manajemen, peralatan where peralatan.idAlat=manajemen.idAlat";
+            return AccessData.ppe1.Query(sql);
+            }
+        }
+
+        public static dynamic KebutuhanQuarter1(string idAlat) {
+            
+            var sql = "select datepart(quarter, tanggal) as Quarter, sum(jumlah) as jumlah from manajemen where idAlat=@0 group by datepart(quarter, tanggal)";
+            return AccessData.ppe1.Query(sql, idAlat);
+            
+        }
+   }
+}

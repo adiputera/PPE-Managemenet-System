@@ -1,0 +1,40 @@
+﻿@{
+    Layout = "~/MasterPage/_Layout.cshtml";
+    Page.Title = "Data Distribusi dan Kontrol";
+
+    var selectedData = ClassManajemen.manajemen.SelectManaj;
+    var grid = new WebGrid(source: selectedData, rowsPerPage: 10);
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        <div>
+    <h1>Data Distribusi Dan Kontrol</h1>
+        <div>
+            <a href="insertmanaj">Tambah data</a>
+            @grid.GetHtml(
+                tableStyle: "grid",
+                headerStyle: "head",
+                alternatingRowStyle: "alt",
+                columns: grid.Columns(                 
+                    grid.Column("waktu"),
+                    grid.Column("Nomor_Kontrol"),
+                    grid.Column("karyawan"),
+                    grid.Column("lokasi"),
+                    grid.Column("PPE"),
+                    grid.Column("jumlah"),
+                    grid.Column(format: @<a href="editmanaj?idManajemen=@item.Nomor_Kontrol">Edit</a>),
+                    grid.Column(format: @<a href="delmanaj?idManajemen=@item.Nomor_Kontrol">Delete</a>)
+                    
+                )
+            )
+        </div>
+</div>
+    </body>
+</html>

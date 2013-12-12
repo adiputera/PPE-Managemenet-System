@@ -1,0 +1,48 @@
+﻿@using System.Dynamic;
+@{
+    Layout = "~/MasterPage/_Layout.cshtml";
+    Page.Title = "Data Kebutuhan Per 3 Bulan";
+
+    var data = ClassManajemen.manajemen.AlatBulan;
+    var grid3 = new WebGrid(source:data, rowsPerPage:10);
+
+    var dataquarter = ClassManajemen.manajemen.KebutuhanQuarter;
+    var grid2 = new WebGrid(source: dataquarter, rowsPerPage: 4);
+
+
+}
+<form>
+    <div>
+    <h1><u>Analysis</u></h1>
+    <h3><u>Tabel Analisis Kebutuhan Barang Per 3 Bulan</u></h3>
+    <a href="kebutuhanbulan"><span>Per Bulan</span></a> |
+    <a href="kebutuhanquarter"><span>Per 3 Bulan</span></a>
+            <div>
+            @grid2.GetHtml(
+                tableStyle: "grid",
+                headerStyle: "head",
+                alternatingRowStyle: "alt",
+                columns: grid2.Columns(              
+                    grid2.Column("Quarter"),
+                    grid2.Column("Jumlah")
+                )
+            )
+            <br>Daftar PPE
+            @grid3.GetHtml(
+                tableStyle: "grid",
+                headerStyle: "head",
+                alternatingRowStyle: "alt",
+                columns: grid3.Columns(              
+                    grid3.Column("Nomor_PPE"),
+                    grid3.Column("PPE"),
+                    grid3.Column(format: @<a href="kebutuhanquartera?idAlat=@item.Nomor_PPE">Pilih</a>)
+                )
+            )
+        <br><br>
+    <small>Quarter 1 : Januari-Maret<br>
+    Quarter 2 : April-Juni<br>
+    Quarter 3 : Juli-September<br>
+    Quarter 4 : Oktober-Desember</small></div>
+
+</div>
+</form>

@@ -1,0 +1,147 @@
+﻿@using System.Dynamic;
+@{
+    Layout = "~/MasterPage/_Layout.cshtml";
+    Page.Title = "Edit Data Peralatan";
+    
+    Validation.RequireField("idAlat", "Anda Harus Mengisi Nomor PPE");
+    Validation.RequireField("namaAlat", "Anda Harus Mengisi Nama PPE");
+    Validation.Add("jumlah",
+        Validator.Required("Anda Harus mengisi Jumlah PPE"),
+        Validator.Integer("isikan dengan angka")
+    );
+
+    var id = "";
+    var namaAlat = "";    
+    var deskripsi = "";
+    var jumlah = "";
+    var idLokasi = "";
+    var namaLokasi = "";  
+
+    var data = ClassLokasi.lokasi.SelectLokasi;
+
+    if(!IsPost){
+        if(!Request.QueryString["IdAlat"].IsEmpty()) {
+            id = Request.QueryString["IdAlat"];
+            var row = Classppe.ppe.SelectPPE2(id);
+
+            if(row != null) {
+                id = row.idAlat;                
+                namaAlat = row.namaAlat;
+                deskripsi = row.deskripsi;
+                jumlah = row.jumlah.ToString();                
+                idLokasi = row.idLokasi;
+                
+            }
+            else{
+                Validation.AddFormError("Tidak ada data yang dipilih");
+            }
+        }
+        else{
+            Validation.AddFormError("Tidak ada data yang dipilih");
+        }
+    }
+
+
+    if(IsPost && Validation.IsValid()){
+       dynamic ppe = new ExpandoObject();
+       ppe.id = Request.Form["id"];
+       ppe.namaAlat = Request.Form["namaAlat"];
+       ppe.deskripsi = Request.Form["deskripsi"];
+       ppe.jumlah = Request.Form["jumlah"];
+       ppe.idLokasi = Request.Form["idLokasi"];
+
+       Classppe.ppe.EditAlat(ppe);
+       Response.Redirect("peralatan");
+       }
+       else{
+           id = Request.QueryString["IdAlat"];
+           var row = Classppe.ppe.SelectPPE2(id);
+
+            if(row != null) {
+                id = row.idAlat;                
+                namaAlat = row.namaAlat;
+                deskripsi = row.deskripsi;
+                jumlah = row.jumlah.ToString();                
+                idLokasi = row.idLokasi;
+                
+            }
+       }
+    
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+                <div>
+  <h1>Perbarui data peralatan</h1>
+  <form method="post">
+    <fieldset>
+        <table>
+            <tr>
+                <td>
+                    <label for="idAlat">Nomor PPE:</label>
+                </td>
+                <td>
+                    <label for="idAlat">@id </label>
+                </td>
+                <td>
+                    @Html.ValidationMessage("idAlat")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="namaAlat">nama alat:</label>
+                </td>
+                <td>
+                    <input type="text" name="namaAlat" value="@namaAlat"/>
+                </td>
+                <td>
+                    @Html.ValidationMessage("namaAlat")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="deskripsi">deskripsi:</label>
+                </td>
+                <td>
+                    <textarea rows="10" cols="60" name="deskripsi">@deskripsi</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="jumlah">jumlah:</label>
+                </td>
+                <td>
+                    <input type="text" name="jumlah" value="@jumlah"/>
+                </td>
+                <td>
+                    @Html.ValidationMessage("jumlah")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="idLokasi">ID Lokasi:</label>
+                </td>
+                <td>
+                    <select name="idLokasi">
+                        @foreach(var item in data){
+                        <option value="@item.idLokasi">@item.namaLokasi</option>
+                        
+                        }
+                    </select>
+                </td>
+            </tr>
+         
+        </table>
+        <input type="hidden" name="id" value="@id">
+        <input type="submit" name="buttonSubmit" value="Perbarui data" /></p>
+    </fieldset>
+  </form>
+</div>
+    </body>
+</html>

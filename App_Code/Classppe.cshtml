@@ -1,0 +1,53 @@
+﻿@using System.Dynamic;
+@functions{
+   public class ppe{
+        //select
+        public static dynamic SelectPPE {
+            get{
+            var sql = "SELECT peralatan.idAlat as Nomor_PPE, peralatan.namaAlat as Nama_PPE, peralatan.deskripsi as Deskripsi, peralatan.jumlah as Jumlah, lokasi.namalokasi as Lokasi FROM peralatan, Lokasi where lokasi.idlokasi=peralatan.idlokasi";
+            return AccessData.ppe1.Query(sql);
+            }
+        }
+
+        //Insert
+        public static void AddAlat(dynamic ppe) {
+            var sql = "INSERT INTO peralatan (idAlat, namaAlat, deskripsi, jumlah, idLokasi) Values(@0, @1, @2, @3, @4)";
+            AccessData.ppe1.Execute(sql, ppe.id, ppe.namaAlat, ppe.deskripsi, ppe.jumlah, ppe.idLokasi);
+        }
+
+        //Edit
+        public static void EditAlat(dynamic ppe) {
+            var sql = "UPDATE peralatan SET namaAlat=@0, deskripsi=@1, jumlah=@2, idLokasi=@3 WHERE idAlat=@4";
+            AccessData.ppe1.Execute(sql, ppe.namaAlat, ppe.deskripsi, ppe.jumlah, ppe.idLokasi, ppe.id);
+        }
+
+        public static void EditJumlah1(dynamic ppe) {
+            var sql = "UPDATE peralatan SET jumlah=jumlah-@0 WHERE idAlat=@1";
+            AccessData.ppe1.Execute(sql, ppe.jumlah, ppe.id);
+        }
+
+        public static void EditJumlah2(dynamic ppe) {
+            var sql = "UPDATE peralatan SET jumlah=jumlah+@0 WHERE idAlat=@1";
+            AccessData.ppe1.Execute(sql, ppe.jml, ppe.id);
+        }
+
+        //Delete
+        public static void DeleteAlat(string id) {
+            var sql = "DELETE peralatan WHERE idAlat=@0";
+            AccessData.ppe1.Execute(sql, id);
+        }
+
+        
+        public static dynamic SelectAlat(string id) {
+            
+            var sql = "SELECT peralatan.idAlat as idAlat, peralatan.namaAlat as Alat from peralatan where peralatan.idLokasi=@0";
+            return AccessData.ppe1.Query(sql, id);
+            
+        }
+
+        public static dynamic SelectPPE2(string id){
+            var sql = "Select * from peralatan where idAlat=@0";
+            return AccessData.ppe1.QuerySingle(sql, id);
+        }
+     }
+}

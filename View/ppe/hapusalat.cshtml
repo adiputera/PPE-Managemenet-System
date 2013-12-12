@@ -1,0 +1,122 @@
+﻿@using System.Dynamic;
+@{
+    Layout = "~/MasterPage/_Layout.cshtml";
+    Page.Title = "Hapus Data Peralatan";
+    
+
+
+    var id = "";
+    var namaAlat = "";    
+    var deskripsi = "";
+    var jumlah = "";
+    var idLokasi = "";  
+    var idlo = "";
+    var nalo = "";
+    
+
+    if(!IsPost){
+        if(!Request.QueryString["idAlat"].IsEmpty()) {
+            id = Request.QueryString["idAlat"];
+            var row = Classppe.ppe.SelectPPE2(id);
+            idlo = row.idLokasi;
+            var nalok = ClassLokasi.lokasi.SelectNalok(idlo);
+            nalo = nalok.namaLokasi;
+
+            if(row != null) {
+                id = row.idAlat;                
+                namaAlat = row.namaAlat;
+                deskripsi = row.deskripsi;
+                jumlah = row.jumlah.ToString();                
+                idLokasi = row.idLokasi;
+                
+            }
+            else{
+                Validation.AddFormError("Tidak ada data yang dipilih");
+            }
+        }
+        else{
+            Validation.AddFormError("Tidak ada data yang dipilih");
+        }
+    }
+
+
+    if(IsPost && !Request["buttondelete"].IsEmpty()){
+            id = Request.Form["id"];
+            Classppe.ppe.DeleteAlat(id);
+            Response.Redirect("peralatan");
+       }
+    
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+
+  <h1>Hapus Data Peralatan</h1>
+@Html.ValidationSummary()
+  <form method="post">
+    <fieldset>
+        <table>
+            <tr>
+                <td>
+                    <label for="idAlat">Nomor PPE:</label>
+                </td>
+                <td>
+                    <label for="idAlat">@id </label>
+                </td>
+                <td>
+      
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="namaAlat">nama alat:</label>
+                </td>
+                <td>
+                    <label for="namaAlat">@namaAlat  </label>
+                </td>
+                <td>
+       
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="deskripsi">deskripsi:</label>
+                </td>
+                <td>
+                    <label for="deskripsi">@deskripsi  </label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="jumlah">jumlah:</label>
+                </td>
+                <td>
+                    <label for="jumlah">@jumlah</label>
+                </td>
+                <td>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="idLokasi">Lokasi:</label>
+                </td>
+                <td>
+                    <label for="idLokasi">@nalo </label>
+                </td>
+            </tr>
+         
+        </table>
+        <input type="hidden" name="id" value="@id">
+        <input type="submit" name="buttondelete" value="hapus data" /></p>
+    </fieldset>
+  </form>
+
+    </body>
+</html>

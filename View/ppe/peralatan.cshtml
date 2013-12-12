@@ -1,0 +1,39 @@
+﻿@{
+    Layout = "~/MasterPage/_Layout.cshtml";
+    Page.Title = "Data Peralatan";
+
+    var selectedData = Classppe.ppe.SelectPPE;
+    var grid = new WebGrid(source: selectedData, rowsPerPage: 10);
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        <div>
+    <h1>List PPE</h1>
+        <div>
+            <a href="insertalat">Tambah data</a>
+            @grid.GetHtml(
+                tableStyle: "grid",
+                headerStyle: "head",
+                alternatingRowStyle: "alt",
+                columns: grid.Columns(                 
+                    grid.Column("Nomor_PPE"),
+                    grid.Column("Nama_PPE"),
+                    grid.Column("Deskripsi"),
+                    grid.Column("Jumlah"),
+                    grid.Column("Lokasi"),
+                    grid.Column(format: @<a href="editalat?idAlat=@item.Nomor_PPE">Edit</a>),
+                    grid.Column(format: @<a href="hapusalat?idAlat=@item.Nomor_PPE">Delete</a>)
+                    
+                )
+            )
+        </div>
+</div>
+    </body>
+</html>

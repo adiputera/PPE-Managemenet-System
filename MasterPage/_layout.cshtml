@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+        <title>@Page.Title</title>
+        <link href="~/css/MyCss.css" rel="stylesheet" type="text/css" />
+        <link href="~/css/Slider/themes/1/js-image-slider.css" rel="stylesheet" type="text/css" />
+        <script src="~/css/Slider/themes/1/js-image-slider.js" type="text/javascript"></script>
+        <link href="~/css/Slider/themes/1/generic.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div id="container">
+        <div id="header">
+            <h1>Personal Protective Equipment Management System</h1>
+            <nav>
+                <div id='cssmenu'> 
+                    <ul>                
+                        <li><a href="~/Default"><span>Home</span></a></li>
+                        <li><a href="~/standard"><span>Standard PPE</span></a></li> 
+                        <li><a href="~/View/ppe/peralatan"><span>Data PPE</span></a></li>
+                        <li><a href="~/View/manajemen/manajemen"><span>Data Distribusi dan Kontrol</span></a></li>      
+                        <li><a href="~/View/manajemen/kebutuhanbulan"><span>Data Kebutuhan PPE</span></a></li>  
+                                  
+                        
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div id="main">
+            <br/>
+            @RenderBody()
+            <br/>
+        </div>
+        <div id="footer">
+          &copy; @DateTime.Now.Year Personal Protective Equipment Management System
+        </div>
+    </div>
+  </body>
+</html>

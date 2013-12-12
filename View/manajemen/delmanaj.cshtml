@@ -1,0 +1,133 @@
+﻿@using System.Dynamic;
+@{
+    Layout = "~/MasterPage/_Layout.cshtml";
+    Page.Title = "Hapus Data";
+    
+
+    var tanggal = "";
+    var id = "";
+    var idPegawai = "";    
+    var idLokasi = "";
+    var idAlat = "";
+    var jumlah = "";  
+    var np = "";
+    var nl = "";
+    var na = "";
+
+    if(!IsPost){
+        if(!Request.QueryString["idManajemen"].IsEmpty()) {
+            id = Request.QueryString["idManajemen"];
+            var row = ClassManajemen.manajemen.SelectManajemen(id);
+            var napeg = ClassManajemen.manajemen.SelectManajemen2(id);
+            np = napeg.nama;
+            var nalok = ClassManajemen.manajemen.SelectManajemen3(id);
+            nl = nalok.nama;
+            var nalat = ClassManajemen.manajemen.SelectManajemen4(id);
+            na = nalat.nama;
+
+            if(row != null) {
+                tanggal = row.tanggal.ToString();
+                id = row.idManajemen;                
+                idPegawai = row.idPegawai;
+                idLokasi = row.idLokasi;
+                idAlat = row.idAlat;                
+                jumlah = row.jumlah.ToString();
+            }
+            else{
+                Validation.AddFormError("Tidak ada data yang dipilih");
+            }
+        }
+        else{
+            Validation.AddFormError("Tidak ada data yang dipilih");
+        }
+    }
+
+
+    if(IsPost && !Request["buttondelete"].IsEmpty()){
+            id = Request.Form["id"];
+            ClassManajemen.manajemen.DeleteManaj(id);
+            Response.Redirect("manajemen");
+       }
+    
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+
+  <h1>Hapus Data</h1>
+@Html.ValidationSummary()
+  <form method="post">
+    <fieldset>
+        <table>
+            <tr>
+                <td>
+                    <label for="idAlat">tanggal:</label>
+                </td>
+                <td>
+                    <label for="idAlat">@tanggal </label>
+                </td>
+                <td>
+      
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="namaAlat">Nomor Kontrol:</label>
+                </td>
+                <td>
+                    <label for="namaAlat">@id  </label>
+                </td>
+                <td>
+       
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="deskripsi">Nama Pegawai:</label>
+                </td>
+                <td>
+                    <label for="deskripsi">@np  </label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="jumlah">Lokasi:</label>
+                </td>
+                <td>
+                    <label for="jumlah">@nl</label>
+                </td>
+                <td>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="idLokasi">Alat:</label>
+                </td>
+                <td>
+                    <label for="idLokasi">@na </label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="idLokasi">Jumlah:</label>
+                </td>
+                <td>
+                    <label for="idLokasi">@jumlah </label>
+                </td>
+            </tr>
+         
+        </table>
+        <input type="hidden" name="id" value="@id">
+        <input type="submit" name="buttondelete" value="hapus data" /></p>
+    </fieldset>
+  </form>
+
+    </body>
+</html>

@@ -1,0 +1,49 @@
+﻿@using System.Dynamic;
+@{
+    Layout = "~/MasterPage/_Layout.cshtml";
+    Page.Title = "Data Kebutuhan Per Bulan";
+
+    var idAlat="";
+    var quarter = "";
+    var jumlah = "";
+
+    var data = ClassManajemen.manajemen.AlatBulan;
+    var grid3 = new WebGrid(source:data, rowsPerPage:10);
+
+    idAlat = Request.QueryString["IdAlat"];
+    var row = ClassManajemen.manajemen.KebutuhanBulan1(idAlat);
+    var grid6 = new WebGrid(source: row, rowsPerPage: 12);
+}
+
+<form method="post">
+<div>
+    <h1><u>Analysis</u></h1>
+    <h3><u>Tabel Analisis Kebutuhan Barang Per Bulan</u></h3>
+    <a href="kebutuhanbulan"><span>Per Bulan</span></a> |
+    <a href="kebutuhanquarter"><span>Per 3 Bulan</span></a>
+            <div>
+            @grid6.GetHtml(
+                tableStyle: "grid",
+                headerStyle: "head",
+                alternatingRowStyle: "alt",
+                columns: grid6.Columns(              
+                    grid6.Column("Bulan"),
+                    grid6.Column("Jumlah")
+                )
+            )
+            <br>Daftar PPE
+            @grid3.GetHtml(
+                tableStyle: "grid",
+                headerStyle: "head",
+                alternatingRowStyle: "alt",
+                columns: grid3.Columns(              
+                    grid3.Column("Nomor_PPE"),
+                    grid3.Column("PPE"),
+                    grid3.Column(format: @<a href="kebutuhanbulana?idAlat=@item.Nomor_PPE">Pilih</a>)
+                )
+            )
+        </div><br><br>
+
+
+</div>
+</form>
